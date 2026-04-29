@@ -160,9 +160,18 @@ export async function createVideoProject(projectId: string): Promise<void> {
     await updateProject(projectId, { status: "done", outputUrl });
   } catch (err) {
     console.error("[4/5] ❌ Ошибка рендеринга:", err);
+    const rawMessage = err instanceof Error ? err.message : String(err);
+    const isRenderUnavailable =
+      rawMessage.includes("Server-side render отключен") ||
+      rawMessage.includes("EXTERNAL_RENDER_WEBHOOK_URL") ||
+      rawMessage.includes("FUNCTION_INVOCATION_TIMEOUT") ||
+      rawMessage.includes("504");
+    const userFriendlyMessage = isRenderUnavailable
+      ? "Финальный рендер не завершился (лимит serverless). Попробуй проект на 15-30с и повтори запуск."
+      : rawMessage;
     await updateProject(projectId, {
       status: "error",
-      errorMessage: err instanceof Error ? err.message : String(err),
+      errorMessage: userFriendlyMessage,
     });
     throw err;
   }

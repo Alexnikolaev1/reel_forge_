@@ -12,7 +12,7 @@ const VIDEO_STYLES = [
   { id: "retro",       label: "Ретро",             desc: "Плёнка, зерно, ностальгия" },
 ];
 
-const DURATIONS = [15, 30, 45, 60];
+const DURATIONS = [15, 30];
 
 type Step = 1 | 2 | 3;
 

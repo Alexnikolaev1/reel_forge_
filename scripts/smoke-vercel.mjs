@@ -26,7 +26,7 @@ if (process.env.ENABLE_SERVER_RENDER === "false") {
 
 if (process.env.VERCEL && process.env.ENABLE_SERVER_RENDER !== "false") {
   console.warn(
-    "ENABLE_SERVER_RENDER is not false. On Vercel free plan, server MP4 rendering may timeout."
+    "Simple mode enabled (ENABLE_SERVER_RENDER=true). Keep videos short (15-30s) to reduce timeout risk on Vercel free."
   );
 }
 

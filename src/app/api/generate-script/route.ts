@@ -8,7 +8,7 @@ import { z } from "zod";
 const bodySchema = z.object({
   topic:    z.string().min(3).max(500),
   style:    z.string().min(1),
-  duration: z.number().int().min(10).max(120),
+  duration: z.number().int().min(10).max(30),
 });
 
 export async function POST(req: NextRequest) {

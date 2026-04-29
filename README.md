@@ -54,10 +54,15 @@ npm run smoke:vercel
 - `ADMIN_PASSWORD`
 - `NEXT_PUBLIC_BASE_URL=https://your-app.vercel.app`
 - `INTERNAL_API_TOKEN=<long-random-token>`
-- `ENABLE_SERVER_RENDER=false` (на free плане серверный MP4-рендер часто упирается в лимиты)
-- `EXTERNAL_RENDER_WEBHOOK_URL=https://<your-render-worker>/jobs`
-- `EXTERNAL_RENDER_WEBHOOK_TOKEN=<optional>`
-- `RENDER_CALLBACK_SECRET=<long-random-token>`
+- `ENABLE_SERVER_RENDER=true` (самый простой режим без внешнего воркера)
+- `EXTERNAL_RENDER_WEBHOOK_URL`, `EXTERNAL_RENDER_WEBHOOK_TOKEN`, `RENDER_CALLBACK_SECRET` — только для внешнего рендера (`ENABLE_SERVER_RENDER=false`)
+
+Простой режим (рекомендован для быстрого запуска):
+- Используй `ENABLE_SERVER_RENDER=true`
+- Делай видео длительностью 15-30 секунд
+- Внешний воркер не требуется
+
+Внешний рендер нужен только если `ENABLE_SERVER_RENDER=false`.
 
 Контракт внешнего рендера:
 - ReelForge отправляет POST на `EXTERNAL_RENDER_WEBHOOK_URL` с `{ projectId, title, fps, totalFrames, width, height, scenes, callbackUrl }`
@@ -115,4 +120,4 @@ remotion/
 - Рендеринг может занять 5–15 минут в зависимости от количества сцен
 - Данные проектов хранятся в `.data/projects.json`
 - Готовые видео — в `public/output/{projectId}/`
-- На Vercel free лучше отключать `ENABLE_SERVER_RENDER` и выносить тяжёлый рендер в отдельный worker/сервер
+- Для простого запуска на Vercel free оставь `ENABLE_SERVER_RENDER=true` и делай ролики 15-30с
