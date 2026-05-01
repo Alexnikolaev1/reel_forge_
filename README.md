@@ -2,7 +2,7 @@
 
 AI-фабрика видеоконтента на основе открытых технологий.
 
-**Стек:** Next.js 16 · Gemini 2.5 Flash · FLUX.1-dev · HunyuanVideo · Remotion · Tailwind · Sonner
+**Стек:** Next.js 16 (patched) · Gemini 2.5 Flash · FLUX.1-dev · HunyuanVideo · Remotion · Tailwind · Sonner
 
 ---
 
