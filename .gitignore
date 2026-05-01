@@ -16,10 +16,12 @@ out/
 
 # ReelForge data
 .data/
-public/output/
+public/output/**
+!public/output/
+!public/output/.gitkeep
+
 *.mp4
 *.png
-!public/output/.gitkeep
 
 # Misc
 .DS_Store
