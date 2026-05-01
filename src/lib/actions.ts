@@ -90,6 +90,8 @@ export async function createVideoProject(projectId: string): Promise<void> {
   const project = await getProject(projectId);
   if (!project) throw new Error("Проект не найден");
 
+  const enableSceneVideo = process.env.ENABLE_SCENE_VIDEO === "true";
+
   const outputDir = path.join(process.cwd(), "public", "output", projectId);
   await fs.mkdir(outputDir, { recursive: true });
 
@@ -111,6 +113,12 @@ export async function createVideoProject(projectId: string): Promise<void> {
 
     const imgPath = path.join(outputDir, `scene-${i + 1}.png`);
     await fs.writeFile(imgPath, Buffer.from(imageBase64, "base64"));
+
+    if (!enableSceneVideo) {
+      console.log(`[3/5] ⏭  Сцена ${i + 1}: режим монтажа (без отдельного видеоклипа на сцену)`);
+      await updateScene(projectId, scene.id, { status: "done", hasImage: true, hasVideo: false });
+      continue;
+    }
 
     console.log(`[3/5] 🎞  Сцена ${i + 1}: генерирую видеоклип...`);
     await updateScene(projectId, scene.id, { status: "generating_video", hasImage: true });

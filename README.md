@@ -2,7 +2,7 @@
 
 AI-фабрика видеоконтента на основе открытых технологий.
 
-**Стек:** Next.js 16 (patched) · Gemini 2.5 Flash · FLUX.1-dev · HunyuanVideo · Remotion · Tailwind · Sonner
+**Стек:** Next.js 16 (patched) · Gemini 2.5 Flash · FLUX.1-dev (изображения) · Remotion (монтаж) · Tailwind · Sonner
 
 ---
 
@@ -55,12 +55,14 @@ npm run smoke:vercel
 - `NEXT_PUBLIC_BASE_URL=https://your-app.vercel.app`
 - `INTERNAL_API_TOKEN=<long-random-token>`
 - `ENABLE_SERVER_RENDER=true` (самый простой режим без внешнего воркера)
+- `ENABLE_SCENE_VIDEO=false` (по умолчанию: монтаж из картинок; `true` включает отдельные видеоклипы на сцену через HF)
 - `EXTERNAL_RENDER_WEBHOOK_URL`, `EXTERNAL_RENDER_WEBHOOK_TOKEN`, `RENDER_CALLBACK_SECRET` — только для внешнего рендера (`ENABLE_SERVER_RENDER=false`)
 
 Простой режим (рекомендован для быстрого запуска):
 - Используй `ENABLE_SERVER_RENDER=true`
 - Делай видео длительностью 15-30 секунд
 - Внешний воркер не требуется
+- Держи `ENABLE_SCENE_VIDEO=false`, чтобы ускорить пайплайн и снизить таймауты на Vercel free
 
 Внешний рендер нужен только если `ENABLE_SERVER_RENDER=false`.
 
@@ -76,7 +78,7 @@ npm run smoke:vercel
 ## Пайплайн генерации
 
 ```
-Тема → Gemini сценарий → FLUX изображения → HunyuanVideo клипы → Remotion MP4
+Тема → Gemini сценарий → FLUX изображения → (опционально) HF видеоклипы на сцену → Remotion MP4
 ```
 
 1. Введи тему, выбери стиль и длительность
@@ -116,7 +118,8 @@ remotion/
 
 ## Советы
 
-- Если `HunyuanVideo` недоступен — замени в `actions.ts` вызов на `generateSceneVideoFallback` (использует `stable-video-diffusion`, работает быстрее)
+- Для Vercel free по умолчанию держи `ENABLE_SCENE_VIDEO=false` (монтаж из статичных кадров в Remotion быстрее и стабильнее)
+- Если включил `ENABLE_SCENE_VIDEO=true` и видео‑модель недоступна — в `hf-generate.ts` можно переключиться на `generateSceneVideoFallback` (другая HF image-to-video модель)
 - Рендеринг может занять 5–15 минут в зависимости от количества сцен
 - Данные проектов хранятся в `.data/projects.json`
 - Готовые видео — в `public/output/{projectId}/`
